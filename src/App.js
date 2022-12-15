@@ -1,4 +1,3 @@
-
 import './App.css';
 import {BrowserRouter,NavLink,Route, Routes} from "react-router-dom"
 import LiveResults from "./LiveResults";
@@ -22,34 +21,35 @@ function App() {
 
     return (
 
-    <div className="App">
+        <div className="App">
 
 
-      <BrowserRouter>
-          <ul>
-              {
-                  links.map((link)=>{
-                      return(
-                          <button className={"Buttons"}>
-                              <NavLink
-                                  to={link.to}>{link.text}</NavLink>
-                          </button>
-                      )
-                  })
-              }
-          </ul>
+            <BrowserRouter>
+                <ul>
+                    {
+                        links.map((link)=>{
+                            return(
+                                <button className={"Buttons"}>
+                                    <NavLink
+                                        to={link.to}>{link.text}</NavLink>
+                                </button>
+                            )
+                        })
+                    }
+                </ul>
 
-          <Routes>
-            <Route path={"/Login"} element ={<Login/>}/>
-            <Route path={"/LiveResults"} element ={<LiveResults/>}/>
-            <Route path={"/LeagueTableLive"} element = {<LeagueTableLive/>}/>
-            <Route path={"/LeagueTable"}  element={<LeagueTable/>}/>
-        </Routes>
-      </BrowserRouter>
+                <Routes>
+                    <Route path={"/Login"} element ={<Login/>}/>
+                    <Route path={"/LiveResults"} element ={<LiveResults/>}/>
+                    <Route path={"/LeagueTableLive"} element = {<LeagueTableLive/>}/>
+                    <Route path={"/LeagueTable"}  element={<LeagueTable/>}/>
+
+                </Routes>
+            </BrowserRouter>
 
 
-    </div>
-  );
+        </div>
+    );
 }
 
 export default App;

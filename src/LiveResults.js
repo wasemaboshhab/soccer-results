@@ -1,11 +1,22 @@
 import React from "react";
 import {useEffect, useState} from "react";
+import Tables from "./Tables";
 
 function LiveResults(){
     return (
-      <div>
-          Live Result
-      </div>
+
+        <div>
+            <Tables/>
+        </div>
+       /* // we need to send getReq and List of Objects from server side
+        <div>
+            <div>
+
+            </div>
+        </div>*/
+
+
+
     );
 
 

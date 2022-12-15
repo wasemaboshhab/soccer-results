@@ -4,7 +4,7 @@ function LeagueTableLive() {
     return (
 
         <div>
-            League Table Live
+
         </div>
     );
 
