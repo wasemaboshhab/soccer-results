@@ -39,7 +39,6 @@ class Login extends  React.Component {
             username:this.state.username,
             password:this.state.password
         }, (response) => {
-
             if (response.data.success) {
                 this.setState({
                     username: response.data.user.username

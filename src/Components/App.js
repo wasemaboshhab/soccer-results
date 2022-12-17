@@ -1,20 +1,18 @@
-import './App.css';
+import '../css/App.css';
 import {BrowserRouter,NavLink,Route, Routes} from "react-router-dom"
 import LiveResults from "./LiveResults";
 import LeagueTable from "./LeagueTable";
 import LeagueTableLive from "./LeagueTableLive";
 import Login from "./Login";
-
-
-
+import '../others/index.css';
 
 function App() {
     const links=[
         // {to:"/", text:"home page"},
-        {to:"Login", text:"Login"},
-        {to:"LiveResults", text:"LiveResults"},
-        {to:"LeagueTableLive", text:"LeagueTableLive"},
-        {to:"LeagueTable", text:"LeagueTable"},
+        {to:"LiveResults", text:"LIVE MATCHES"},
+        {to:"LeagueTable", text:"LEAGUE TABLE"},
+        {to:"LeagueTableLive", text:"LIVE RESULT"},
+        {to:"Login", text:"LOGIN"},
     ]
 
     // const activeMenuClass=({isActive})=>(isActive ? "active-menu" : "non-active-menu");
@@ -30,8 +28,9 @@ function App() {
                         links.map((link)=>{
                             return(
                                 <button className={"Buttons"}>
-                                    <NavLink
-                                        to={link.to}>{link.text}</NavLink>
+                                    <NavLink to={link.to}>
+                                        {link.text}
+                                    </NavLink>
                                 </button>
                             )
                         })
