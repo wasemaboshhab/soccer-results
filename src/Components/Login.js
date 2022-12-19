@@ -1,6 +1,7 @@
 import {sendApiGetRequest, sendApiPostRequest} from "./AppResponse";
 
 import React from "react";
+import axios from "axios";
 class Login extends  React.Component {
 
     state= {
@@ -8,7 +9,10 @@ class Login extends  React.Component {
         password: "",
         responseFromGetRequest: "",
         responseFromPostRequest: "",
-        errorMessage: ""
+        errorMessage: "",
+        userExist: false,
+        groupsNames: [],
+        renderOption: false
     }
 
     addUserName = (e) => {
@@ -24,16 +28,20 @@ class Login extends  React.Component {
         console.log(this.state)
     }
 
+    getAllTheTeams=()=> {
+        sendApiGetRequest("http://localhost:8989/get-names-groups", {
 
-    check = () =>{
-        if(this.state.username.length>0){
-            alert("hello")
-        }
+        }, (response) => {
+
+           // const array = response.data;
+            this.setState({
+                groupsNames: response.data
+            })
+        })
+
     }
 
     getRequest=()=> {
-        //let username=this.state.username;
-        // let password=this.state.password;
 
         sendApiPostRequest("http://localhost:8989/sign-in", {
             username:this.state.username,
@@ -41,11 +49,15 @@ class Login extends  React.Component {
         }, (response) => {
             if (response.data.success) {
                 this.setState({
-                    username: response.data.user.username
+                    username: response.data.user.username,
+                    userExist: true,
+                    renderOption: true
                 })
-                alert(response.data.user.username)
+                alert("sign in successfully!");
+                this.getAllTheTeams();
+
             } else {
-                if (response.data.errorCode == 1) {
+                if (response.data.errorCode === 1) {
                     this.setState({
                         errorMessage: "No Such User"
                     })
@@ -63,20 +75,53 @@ class Login extends  React.Component {
         }
     }
 
-    render(){
+    login = () => {
         return (
             <div>
                 <div className={"login"}>
-                    <input type = "text" value={this.state.username} onChange={this.addUserName} placeholder={"username"}/>
+                    <input type="text" value={this.state.username} onChange={this.addUserName}
+                           placeholder={"username"}/>
                     <br/>
-                    <input  type = "text" value={this.state.password} onChange={this.addUserPassword} placeholder={"password"}/>
+                    <input type="password" value={this.state.password} onChange={this.addUserPassword}
+                           placeholder={"password"}/>
                     <br/>
+
 
                 </div>
-                <button type = "login"  onClick={this.getRequest} disabled={false}>Login</button>
-            </div>
-        );
+                <button type="login" onClick={this.getRequest} disabled={this.state.userExist}>Login</button>
 
+            </div>
+
+        )
+    }
+       
+    render(){
+        {
+           // let text = this.state.groupsNames.toString();
+            return (
+
+                this.state.renderOption ?
+
+                    <select >
+                        {
+                            this.state.groupsNames.map((team) => {
+                                return (
+                                    <option>{team}</option>
+
+                                )
+                            })
+                        }
+
+
+                    </select>
+
+                : this.login()
+
+
+
+        );
+    }
     }
 }
 export default Login;
+
