@@ -12,8 +12,13 @@ class Login extends  React.Component {
         errorMessage: "",
         userExist: false,
         groupsNames: [],
-        renderOption: false
+        renderOption: false,
+        option1: "",
+        option2: "",
+
+
     }
+
 
     addUserName = (e) => {
         this.setState({
@@ -26,20 +31,24 @@ class Login extends  React.Component {
             password: e.target.value
         })
         console.log(this.state)
+
     }
 
-    getAllTheTeams=()=> {
-        sendApiGetRequest("http://localhost:8989/get-names-groups", {
 
-        }, (response) => {
 
-           // const array = response.data;
+    componentDidMount() {
+        axios.get("http://localhost:8989/get-names-groups", {
+            params:{
+
+            }
+
+        }).then((response) => {
+            const array = response.data;
             this.setState({
-                groupsNames: response.data
-            })
-        })
-
-    }
+                groupsNames: array
+            });
+        });
+    };
 
     getRequest=()=> {
 
@@ -54,7 +63,6 @@ class Login extends  React.Component {
                     renderOption: true
                 })
                 alert("sign in successfully!");
-                this.getAllTheTeams();
 
             } else {
                 if (response.data.errorCode === 1) {
@@ -94,34 +102,86 @@ class Login extends  React.Component {
 
         )
     }
-       
+    selectedGroup1 = () => {
+        let option1 = document.getElementById("option1");
+        let text1 = option1.options[option1.selectedIndex].text;
+        this.setState({
+            option1: text1,
+        })
+    }
+    selectedGroup2 = () => {
+        let option2 = document.getElementById("option2");
+        let text2 = option2.options[option2.selectedIndex].text;
+
+        this.setState({
+            option2: text2
+        })
+    }
     render(){
         {
-           // let text = this.state.groupsNames.toString();
             return (
 
+               /* <select id ="teams" value={selectedTeam2} onChange={team2} >
+                    <option disabled={true} value={""}  >
+                        select second team
+                    </option>
+                    {
+                        teams.map(team =>{
+                            let isDisable = team.name==selectedTeam1
+                            return (
+                                <option value={team.name} disabled={isDisable||live}>{team.name} </option>)
+                        })
+                    }
+                </select>
+            <button onClick={onSaveButton} disabled={live}>save</button>
+            */
+
                 this.state.renderOption ?
+                    <div>
+                    <div id={"group1"}>
+                          Group 1
+                          <br/>
+                                <select id={"option1"} onChange={this.selectedGroup1} >
+                                {
+                                    this.state.groupsNames.map((team,i) => {
+                                        return (
+                                            <option value={i} >{team.toString()}</option>
+                                        )
+                                    })
+                                }
+                                </select>
+                      </div>
 
-                    <select >
-                        {
-                            this.state.groupsNames.map((team) => {
-                                return (
-                                    <option>{team}</option>
+                      <div id={"group2"}>
+                          <br/>
+                          <br/>
+                          Group 2
+                          <br/>
+                                <select id={"option2"} onChange={this.selectedGroup2} >
+                                    {
 
-                                )
-                            })
-                        }
-
-
-                    </select>
-
-                : this.login()
+                                        this.state.groupsNames.map( (team,i) => {
+                                            let disabled = team.toString()===this.state.option1
+                                            return (
+                                                <option value={i} disabled={disabled}  >{team.toString()}</option>
 
 
+                                            )
+                                        })
+                                    }
+                                </select>
+                      </div>
+                        <button>save</button>
+                        <br/>
+                        <button>End Game</button>
+                   </div>
 
-        );
-    }
+                    : this.login()
+
+
+
+            );
+        }
     }
 }
 export default Login;
-

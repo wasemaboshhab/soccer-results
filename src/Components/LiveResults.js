@@ -1,6 +1,7 @@
 import React from "react";
 import "../css/leagueTable.css"
 import "../css/LiveResult.css"
+import Login from "./Login";
 
 function LiveResults() {
     /*state = {
