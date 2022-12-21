@@ -144,8 +144,9 @@ class Login extends  React.Component {
                                 <select id={"option1"} onChange={this.selectedGroup1} >
                                 {
                                     this.state.groupsNames.map((team,i) => {
+                                        let disabled = team.toString()===this.state.option2
                                         return (
-                                            <option value={i} >{team.toString()}</option>
+                                            <option value={i} disabled={disabled}>{team.toString()}</option>
                                         )
                                     })
                                 }
