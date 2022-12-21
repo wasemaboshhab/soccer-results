@@ -15,8 +15,9 @@ class Login extends  React.Component {
         renderOption: false,
         option1: "",
         option2: "",
-
-
+        groupOneGoals: 0,
+        groupTwoGoals: 0,
+        isClicked: false
     }
 
 
@@ -69,7 +70,7 @@ class Login extends  React.Component {
                     this.setState({
                         errorMessage: "No Such User"
                     })
-                } else if (response.data.errorCode == 2) {
+                } else if (response.data.errorCode === 2) {
                     this.setState({
                         errorMessage: "Password Incorrect"
                     })
@@ -93,8 +94,6 @@ class Login extends  React.Component {
                     <input type="password" value={this.state.password} onChange={this.addUserPassword}
                            placeholder={"password"}/>
                     <br/>
-
-
                 </div>
                 <button type="login" onClick={this.getRequest} disabled={this.state.userExist}>Login</button>
 
@@ -117,31 +116,49 @@ class Login extends  React.Component {
             option2: text2
         })
     }
+
+    addGoalsGroupOne = (e) => {
+        let counter = this.state.groupOneGoals;
+        this.setState({
+            groupOneGoals:counter+1
+        })
+    }
+
+    addGoalsGroupTwo = (e) => {
+        let counter = this.state.groupTwoGoals;
+        this.setState({
+            groupTwoGoals:counter+1
+        })
+    }
+
+    saveMatch = () => {
+        this.setState({
+            isClicked: true
+        })
+        sendApiPostRequest("http://localhost:8989/save-match", {
+            team1: this.state.option1,
+            team2: this.state.option2,
+            team1Goals: this.state.groupOneGoals,
+            team2Goals: this.state.groupTwoGoals
+        }, (response) => {
+            if (response.data.success) {
+                this.setState({
+
+                })
+                alert("sign in successfully!");
+            }
+        })
+    }
+
     render(){
         {
             return (
-
-               /* <select id ="teams" value={selectedTeam2} onChange={team2} >
-                    <option disabled={true} value={""}  >
-                        select second team
-                    </option>
-                    {
-                        teams.map(team =>{
-                            let isDisable = team.name==selectedTeam1
-                            return (
-                                <option value={team.name} disabled={isDisable||live}>{team.name} </option>)
-                        })
-                    }
-                </select>
-            <button onClick={onSaveButton} disabled={live}>save</button>
-            */
-
                 this.state.renderOption ?
                     <div>
-                    <div id={"group1"}>
-                          Group 1
-                          <br/>
-                                <select id={"option1"} onChange={this.selectedGroup1} >
+                        <div id={"group1"}>
+                            Group 1
+                            <br/>
+                            <select id={"option1"} onChange={this.selectedGroup1} >
                                 {
                                     this.state.groupsNames.map((team,i) => {
                                         let disabled = team.toString()===this.state.option2
@@ -150,33 +167,34 @@ class Login extends  React.Component {
                                         )
                                     })
                                 }
-                                </select>
-                      </div>
-
-                      <div id={"group2"}>
-                          <br/>
-                          <br/>
-                          Group 2
-                          <br/>
-                                <select id={"option2"} onChange={this.selectedGroup2} >
-                                    {
-
-                                        this.state.groupsNames.map( (team,i) => {
-                                            let disabled = team.toString()===this.state.option1
-                                            return (
-                                                <option value={i} disabled={disabled}  >{team.toString()}</option>
-
-
-                                            )
-                                        })
-                                    }
-                                </select>
-                      </div>
+                            </select>
+                            <div>{this.state.groupOneGoals}
+                                <button id={"addGoal"} onClick={this.addGoalsGroupOne} disabled={!this.state.isClicked}>Add Goal</button>
+                            </div>
+                        </div>
+                        <div id={"group2"}>
+                            <br/>
+                            <br/>
+                            Group 2
+                            <br/>
+                            <select id={"option2"} onChange={this.selectedGroup2} >
+                                {
+                                    this.state.groupsNames.map( (team,i) => {
+                                        let disabled = team.toString()===this.state.option1
+                                        return (
+                                            <option value={i} disabled={disabled}  >{team.toString()}</option>
+                                        )
+                                    })
+                                }
+                            </select>
+                            <div>{this.state.groupTwoGoals}
+                                <button id={"addGoal"} onClick={this.addGoalsGroupTwo} disabled={!this.state.isClicked}>Add Goal</button>
+                            </div>
+                        </div>
                         <button>save</button>
                         <br/>
                         <button>End Game</button>
-                   </div>
-
+                    </div>
                     : this.login()
 
 
