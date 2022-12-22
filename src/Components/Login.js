@@ -51,8 +51,7 @@ class Login extends  React.Component {
         });
     };
 
-    getRequest=()=> {
-
+    signInRequest=()=> {
         sendApiPostRequest("http://localhost:8989/sign-in", {
             username:this.state.username,
             password:this.state.password
@@ -84,23 +83,20 @@ class Login extends  React.Component {
         }
     }
 
-    login = () => {
-        return (
-            <div>
-                <div className={"login"}>
-                    <input type="text" value={this.state.username} onChange={this.addUserName}
-                           placeholder={"username"}/>
-                    <br/>
-                    <input type="password" value={this.state.password} onChange={this.addUserPassword}
-                           placeholder={"password"}/>
-                    <br/>
-                </div>
-                <button type="login" onClick={this.getRequest} disabled={this.state.userExist}>Login</button>
-
-            </div>
-
-        )
+    saveMatch = () => {
+        sendApiPostRequest("http://localhost:8989/save-match", {
+            team1: this.state.option1,
+            team2: this.state.option2,
+        }, (response) => {
+            if (response.data) {
+                this.setState({
+                    isClicked: true
+                })
+                alert("Game saved!");
+            }
+        })
     }
+
     selectedGroup1 = () => {
         let option1 = document.getElementById("option1");
         let text1 = option1.options[option1.selectedIndex].text;
@@ -122,6 +118,14 @@ class Login extends  React.Component {
         this.setState({
             groupOneGoals:counter+1
         })
+        sendApiPostRequest("http://localhost:8989/add-goals-team1", {
+            team1: this.state.option1,
+            team1Goals: this.state.groupOneGoals
+        }, (response) => {
+            if (response.data) {
+                alert("goal Added!");
+            }
+        })
     }
 
     addGoalsGroupTwo = (e) => {
@@ -129,25 +133,32 @@ class Login extends  React.Component {
         this.setState({
             groupTwoGoals:counter+1
         })
-    }
-
-    saveMatch = () => {
-        this.setState({
-            isClicked: true
-        })
-        sendApiPostRequest("http://localhost:8989/save-match", {
-            team1: this.state.option1,
+        sendApiPostRequest("http://localhost:8989/add-goals-team2", {
             team2: this.state.option2,
-            team1Goals: this.state.groupOneGoals,
             team2Goals: this.state.groupTwoGoals
         }, (response) => {
-            if (response.data.success) {
-                this.setState({
-
-                })
-                alert("sign in successfully!");
+            if (response.data) {
+                alert("goal Added!");
             }
         })
+    }
+
+    login = () => {
+        return (
+            <div>
+                <div className={"login"}>
+                    <input type="text" value={this.state.username} onChange={this.addUserName}
+                           placeholder={"username"}/>
+                    <br/>
+                    <input type="password" value={this.state.password} onChange={this.addUserPassword}
+                           placeholder={"password"}/>
+                    <br/>
+                </div>
+                <button type="login" onClick={this.signInRequest} disabled={this.state.userExist}>Login</button>
+
+            </div>
+
+        )
     }
 
     render(){
@@ -191,7 +202,7 @@ class Login extends  React.Component {
                                 <button id={"addGoal"} onClick={this.addGoalsGroupTwo} disabled={!this.state.isClicked}>Add Goal</button>
                             </div>
                         </div>
-                        <button>save</button>
+                        <button onClick={this.saveMatch}>save</button>
                         <br/>
                         <button>End Game</button>
                     </div>
