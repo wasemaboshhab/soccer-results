@@ -16,6 +16,44 @@ class LiveResults extends React.Component{
         })
     }
 
+    colorTeam1 = (game) => {
+        let colorStyle = "";
+        if (game.team1Goals > game.team2Goals) {
+            colorStyle = "green";
+        } else
+            colorStyle = "red";
+
+
+
+        if (game.team1Goals === game.team2Goals)
+             colorStyle = "#f5d12e";
+
+        return colorStyle;
+
+      /*  <td style={{color :this.matchResult(game)}}>{game.team1}</td>
+        <td style={{color : this.matchResult(game)}}>{game.team1Goals}</td>*/
+
+
+    };
+    colorTeam2 = (game) => {
+        let colorStyle = "";
+
+        if (game.team2Goals > game.team1Goals) {
+            colorStyle = "green";
+        } else {
+            colorStyle = "red";
+        }
+
+        if (game.team1Goals === game.team2Goals)
+            colorStyle = "#f5d12e";
+
+        return colorStyle;
+
+        /*  <td style={{color :this.matchResult(game)}}>{game.team1}</td>
+          <td style={{color : this.matchResult(game)}}>{game.team1Goals}</td>*/
+
+
+    };
     render() {
 
         return (
@@ -35,17 +73,20 @@ class LiveResults extends React.Component{
                             <th>T2</th>
                         </tr>
 
-
                         {
                             this.state.liveGames.map((game) => {
                                 return (
-                                    <tr className={"wpos"}>
-                                        <td>{game.team1}</td>
-                                        <td>{game.team1Goals}</td>
-                                        <td>{game.team2Goals}</td>
-                                        <td>{game.team2}</td>
+                                    <tr className={ "wpos"}>
+
+                                        <td style={{color :this.colorTeam1(game)}}>{game.team1}</td>
+                                        <td style={{color : this.colorTeam1(game)}}>{game.team1Goals}</td>
+
+
+
+                                        <td style={{color :this.colorTeam2(game)}} >{game.team2Goals}</td>
+                                        <td style={{color :this.colorTeam2(game)}}>{game.team2}</td>
                                     </tr>
-                                )
+                                );
                             })
                         }
                     </table>

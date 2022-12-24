@@ -13,8 +13,8 @@ class Login extends  React.Component {
         userExist: false,
         groupsNames: [],
         renderOption: false,
-        option1: "",
-        option2: "",
+        option1: "Netivot",
+        option2: "Bnai-Reina",
         groupOneGoals: 0,
         groupTwoGoals: 0,
         isClicked: false
@@ -103,7 +103,7 @@ class Login extends  React.Component {
         this.setState({
             groupOneGoals:counter+1
         })
-        sendApiPostRequest("http://localhost:8989/add-goals-team1", {
+        sendApiPostRequest("http://localhost:8989/update-team1-goals", {
             team1: this.state.option1,
             team1Goals: this.state.groupOneGoals
         }, (response) => {
@@ -118,7 +118,7 @@ class Login extends  React.Component {
         this.setState({
             groupTwoGoals:counter+1
         })
-        sendApiPostRequest("http://localhost:8989/add-goals-team2", {
+        sendApiPostRequest("http://localhost:8989/update-team2-goals", {
             team2: this.state.option2,
             team2Goals: this.state.groupTwoGoals
         }, (response) => {
@@ -202,7 +202,7 @@ class Login extends  React.Component {
                                 <button id={"addGoal"} onClick={this.addGoalsGroupTwo} disabled={!this.state.isClicked}>Add Goal</button>
                             </div>
                         </div>
-                        <button onClick={this.saveMatch}>save</button>
+                        <button onClick={this.saveMatch} disabled={this.state.groupOneGoals !== 0 || this.state.groupTwoGoals !== 0}>save</button>
                         <br/>
                         <button>End Game</button>
                     </div>

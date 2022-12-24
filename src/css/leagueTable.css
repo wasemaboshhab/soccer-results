@@ -35,13 +35,13 @@ th{
     text-align: center;
 }
 .wpos td{
-    color:#006600
+    color: rgb(199, 65, 16)
 }
 table .col{
     border-bottom: 7px solid black;
 }
 .wpos:hover{
-    background-color: #A9A9A9;
+    background-color: rgb(40, 40, 40);
 }
 .wpos:hover.td{
     color: #000000;
