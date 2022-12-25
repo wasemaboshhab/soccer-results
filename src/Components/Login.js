@@ -13,8 +13,8 @@ class Login extends  React.Component {
         userExist: false,
         groupsNames: [],
         renderOption: false,
-        option1: "Netivot",
-        option2: "Bnai-Reina",
+        option1: "",
+        option2: "",
         groupOneGoals: 0,
         groupTwoGoals: 0,
         isClicked: false
@@ -83,6 +83,24 @@ class Login extends  React.Component {
         }
     }
 
+    saveMatch = () => {
+
+        sendApiPostRequest("http://localhost:8989/save-match", {
+            team1: this.state.option1,
+            team2: this.state.option2,
+
+        }, (response) => {
+            if (response.data.success) {
+                this.setState({
+                    isClicked: true
+                })
+                alert("Game saved!");
+            }
+            else if(response.data.errorCode === 1)
+                alert("One of the teams is already playing, please choose a different one!");
+        })
+    }
+
     selectedGroup1 = () => {
         let option1 = document.getElementById("option1");
         let text1 = option1.options[option1.selectedIndex].text;
@@ -145,21 +163,6 @@ class Login extends  React.Component {
 
         )
     }
-    saveMatch = () => {
-
-        sendApiPostRequest("http://localhost:8989/save-match", {
-            team1: this.state.option1,
-            team2: this.state.option2,
-
-        }, (response) => {
-            if (response.data) {
-                this.setState({
-                    isClicked: true
-                })
-                alert("Game saved!");
-            }
-        })
-    }
 
     render(){
         {
@@ -170,11 +173,12 @@ class Login extends  React.Component {
                             Group 1
                             <br/>
                             <select id={"option1"} onChange={this.selectedGroup1} >
-                                {
+                                <option value="">-Please choose a group-</option>
+                                    {
                                     this.state.groupsNames.map((team,i) => {
                                         let disabled = team.toString()===this.state.option2
                                         return (
-                                            <option value={i} disabled={disabled}>{team}</option>
+                                                <option value={i} disabled={disabled}>{team}</option>
                                         )
                                     })
                                 }
@@ -189,6 +193,7 @@ class Login extends  React.Component {
                             Group 2
                             <br/>
                             <select id={"option2"} onChange={this.selectedGroup2} >
+                                <option value="">-Please choose a group-</option>
                                 {
                                     this.state.groupsNames.map( (team,i) => {
                                         let disabled = team.toString()===this.state.option1
